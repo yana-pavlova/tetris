@@ -20,7 +20,7 @@ function initGame() {
   y = -2;
   x = 3;
   window.requestAnimationFrame(drawBoard);
-  window.addEventListener('keydown', handleKeyPress);
+  window.addEventListener('keydown', handleTetrominoMovement);
   drawBoard();
 }
 
@@ -41,82 +41,7 @@ function getTetromino() {
   return TETROMINOS[ranNum]
 }
 
-function moveTetrominoDown() {
-  y += 1;
-  for(let row = 0; row < tetromino.length; row++) {
-    for(let column = 0; column < tetromino[row].length; column++) {
-      if(gameBoard[y + row - 1] === undefined) continue;
-      if(tetromino[row][column] !== 1) continue;
-      gameBoard[y + row - 1][x + column] = 0;
-    }
-  }
-  for(let row = 0; row < tetromino.length; row++) {
-    for(let column = 0; column < tetromino[row].length; column++) {
-      if(gameBoard[y + row] === undefined) continue;
-      if(tetromino[row][column] !== 1) continue;
-      gameBoard[y + row][x + column] = 1;
-    }
-  }
-}
-
-function moveTetrominoRight() {
-  x += 1;
-  for(let row = 0; row < tetromino.length; row++) {
-    for(let column = 0; column < tetromino[row].length; column++) {
-      //if(gameBoard[y + row] === undefined) continue;
-      if(tetromino[row][column] !== 1) continue;
-      gameBoard[y + row][x + column - 1] = 0;
-    }
-  }
-  for(let row = 0; row < tetromino.length; row++) {
-    for(let column = 0; column < tetromino[row].length; column++) {
-      //if(gameBoard[y + row] === undefined) continue;
-      if(tetromino[row][column] !== 1) continue;
-      gameBoard[y + row][x + column] = 1;
-    }
-  }
-}
-
-function moveTetrominoLeft() {
-  x -= 1;
-  for(let row = 0; row < tetromino.length; row++) {
-    for(let column = 0; column < tetromino[row].length; column++) {
-      //if(gameBoard[y + row] === undefined) continue;
-      if(tetromino[row][column] !== 1) continue;
-      gameBoard[y + row][x + column + 1] = 0;
-    }
-  }
-  for(let row = 0; row < tetromino.length; row++) {
-    for(let column = 0; column < tetromino[row].length; column++) {
-      //if(gameBoard[y + row] === undefined) continue;
-      if(tetromino[row][column] !== 1) continue;
-      gameBoard[y + row][x + column] = 1;
-    }
-  }
-}
-
-function rotateTetromino() {
-  console.table(gameBoard);
-  for(let row = 0; row < tetromino.length; row++) {
-    for(let column = 0; column < tetromino[row].length; column++) {
-      if(gameBoard[y + row - 1] === undefined) continue;
-      if(tetromino[row][column] !== 1) continue;
-      gameBoard[y + row][x + column] = 0;
-    }
-  }
-  console.table(gameBoard);
-  tetromino = tetromino[0].map((val, index) => tetromino.map(row => row[index]).reverse());
-  console.log(tetromino);
-  for(let row = 0; row < tetromino.length; row++) {
-    for(let column = 0; column < tetromino[row].length; column++) {
-      if(gameBoard[y + row] === undefined) continue;
-      if(tetromino[row][column] !== 1) continue;
-      gameBoard[y + row][x + column] = 1;
-    }
-  }
-}
-
-function handleKeyPress(ev) {
+function handleTetrominoMovement(ev) {
   switch(ev.key) {
     case 'ArrowDown':
       moveTetrominoDown();
@@ -133,6 +58,73 @@ function handleKeyPress(ev) {
     default:
       break;
   }
+}
+
+function moveTetrominoDown() {
+  y += 1;
+  for(let row = 0; row < tetromino.length; row++) {
+    for(let column = 0; column < tetromino[row].length; column++) {
+      if(gameBoard[y + row] === undefined) continue;
+      if(tetromino[row][column] !== 1) continue;
+      gameBoard[y + row][x + column] = 1;
+    }
+  }
+}
+
+function moveTetrominoRight() {
+  for(let row = 0; row < tetromino.length; row++) {
+    for(let column = 0; column < tetromino[row].length; column++) {
+      if(gameBoard[y + row] === undefined) continue;
+      if(tetromino[row][column] !== 1) continue;
+      gameBoard[y + row][x + column] = 0;
+    }
+  }
+  x += 1;
+  for(let row = 0; row < tetromino.length; row++) {
+    for(let column = 0; column < tetromino[row].length; column++) {
+      if(gameBoard[y + row] === undefined) continue;
+      if(tetromino[row][column] !== 1) continue;
+      gameBoard[y + row][x + column] = 1;
+    }
+  }
+}
+
+function moveTetrominoLeft() {
+  for(let row = 0; row < tetromino.length; row++) {
+    for(let column = 0; column < tetromino[row].length; column++) {
+      if(gameBoard[y + row] === undefined) continue;
+      if(tetromino[row][column] !== 1) continue;
+      gameBoard[y + row][x + column] = 0;
+    }
+  }
+  x -= 1;
+  for(let row = 0; row < tetromino.length; row++) {
+    for(let column = 0; column < tetromino[row].length; column++) {
+      if(gameBoard[y + row] === undefined) continue;
+      if(tetromino[row][column] !== 1) continue;
+      gameBoard[y + row][x + column] = 1;
+    }
+  }
+}
+
+function rotateTetromino() {
+  console.table(gameBoard);
+  for(let row = 0; row < tetromino.length; row++) {
+    for(let column = 0; column < tetromino[row].length; column++) {
+      if(gameBoard[y + row] === undefined) continue;
+      if(tetromino[row][column] !== 1) continue;
+      gameBoard[y + row][x + column] = 0;
+    }
+  }
+  tetromino = tetromino[0].map((val, index) => tetromino.map(row => row[index]).reverse());
+  for(let row = 0; row < tetromino.length; row++) {
+    for(let column = 0; column < tetromino[row].length; column++) {
+      if(gameBoard[y + row] === undefined) continue;
+      if(tetromino[row][column] !== 1) continue;
+      gameBoard[y + row][x + column] = 1;
+    }
+  }
+  console.table(gameBoard);
 }
 
 initGame();
