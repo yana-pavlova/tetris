@@ -61,6 +61,13 @@ function handleTetrominoMovement(ev) {
 }
 
 function moveTetrominoDown() {
+  for(let row = 0; row < tetromino.length; row++) {
+    for(let column = 0; column < tetromino[row].length; column++) {
+      if(gameBoard[y + row] === undefined) continue;
+      if(tetromino[row][column] !== 1) continue;
+      gameBoard[y + row][x + column] = 0;
+    }
+  }
   y += 1;
   for(let row = 0; row < tetromino.length; row++) {
     for(let column = 0; column < tetromino[row].length; column++) {
