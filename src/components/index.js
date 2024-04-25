@@ -80,9 +80,8 @@ function setNewPosition() {
 }
 
 function canMoveDown() {
-  console.log('tetromino length:', tetromino.length);
   for(let row = 0; row < tetromino.length; row++) {
-    if(y + tetromino.length > ROWS) {
+    if(y + tetromino.length >= ROWS) {
       return false
     }
     for(let column = 0; column < tetromino[row].length; column++) {
@@ -94,25 +93,44 @@ function canMoveDown() {
 }
 
 function moveTetrominoDown() {
-  clearPreviousPosition();
-  y += 1;
-  if(canMoveDown())
+  let newX = x;
+  let newY = y + 1;
+  if(canMoveDown(newX, newY)) {
+    clearPreviousPosition();
+    y += 1;
     setNewPosition()
-  else
+  } else {
     initGame()
-  console.log('y:', y);
+  }
+}
+
+function canMoveSideways(x, y) {
+  let rib;
+  tetromino.forEach(item => rib = item.length);
+  if(x < 0 || x + rib > COLS) {
+    return false
+  }
+  return true
 }
 
 function moveTetrominoRight() {
-  clearPreviousPosition()
-  x += 1;
-  setNewPosition()
+  let newX = x + 1;
+  let newY = y;
+  if(canMoveSideways(newX, newY)) {
+    clearPreviousPosition();
+    x += 1;
+    setNewPosition();
+  }
 }
 
 function moveTetrominoLeft() {
-  clearPreviousPosition()
-  x -= 1;
-  setNewPosition()
+  let newX = x - 1;
+  let newY = y;
+  if(canMoveSideways(newX, newY)) {
+    clearPreviousPosition();
+    x -= 1;
+    setNewPosition();
+  }
 }
 
 function rotateTetromino() {
