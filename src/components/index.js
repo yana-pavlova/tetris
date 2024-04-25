@@ -1,4 +1,5 @@
 import '../pages/index.css';
+import {TETROMINOS} from './tetrominos.js';
 
 const CANVAS = document.querySelector('#canvas');
 CANVAS.width = 300;
@@ -10,7 +11,7 @@ const ROWS = 20;
 const COLS = 10;
 let gameBoard = Array.from({length: ROWS}, () => Array(COLS).fill(0));
 
-let tetromino = getTetromino();
+let tetromino;
 let y = -2;
 let x = 3;
 
@@ -36,11 +37,8 @@ function drawBoard() {
 }
 
 function getTetromino() {
-  return [
-    [1,1,1],
-    [0,1,0],
-    [0,1,0]
-  ];
+  const ranNum = Math.floor(Math.random() * TETROMINOS.length);
+  return TETROMINOS[ranNum]
 }
 
 function moveTetrominoDown() {
