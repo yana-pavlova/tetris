@@ -17,7 +17,7 @@ let x = 3;
 
 function initGame() {
   tetromino = getTetromino();
-  y = -2;
+  y = -tetromino.length;
   x = 3;
   window.requestAnimationFrame(drawBoard);
   window.addEventListener('keydown', handleTetrominoMovement);
@@ -79,10 +79,28 @@ function setNewPosition() {
   }
 }
 
+function canMoveDown() {
+  console.log('tetromino length:', tetromino.length);
+  for(let row = 0; row < tetromino.length; row++) {
+    if(y + tetromino.length > ROWS) {
+      return false
+    }
+    for(let column = 0; column < tetromino[row].length; column++) {
+      // TODO: проверить на столкновение с фигурами
+      console.log();
+    }
+  }
+  return true
+}
+
 function moveTetrominoDown() {
-  clearPreviousPosition()
+  clearPreviousPosition();
   y += 1;
-  setNewPosition()
+  if(canMoveDown())
+    setNewPosition()
+  else
+    initGame()
+  console.log('y:', y);
 }
 
 function moveTetrominoRight() {
@@ -98,11 +116,12 @@ function moveTetrominoLeft() {
 }
 
 function rotateTetromino() {
-  console.table(gameBoard);
-  clearPreviousPosition()
+  clearPreviousPosition();
   tetromino = tetromino[0].map((val, index) => tetromino.map(row => row[index]).reverse());
-  setNewPosition()
-  console.table(gameBoard);
+  if(canMoveDown())
+    setNewPosition()
+  else console.log("нельзя вращать, кончается доска!");
+  //console.table(gameBoard);
 }
 
 initGame();
