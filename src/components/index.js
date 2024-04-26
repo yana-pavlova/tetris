@@ -79,14 +79,23 @@ function setNewPosition() {
   }
 }
 
-function canMoveDown() {
-  for(let row = 0; row < tetromino.length; row++) {
-    if(y + tetromino.length >= ROWS) {
-      return false
-    }
-    for(let column = 0; column < tetromino[row].length; column++) {
-      // TODO: проверить на столкновение с фигурами
-      console.log();
+function canMoveDown(x, y) {
+  if(y + tetromino.length > ROWS) {
+    return false
+  }
+  for(let rows = 0; rows < tetromino.length; rows++) {
+    for(let cols = 0; cols < tetromino[rows].length; cols++) {
+      console.log('y:', y, 'rows:', rows, 'x:', x, 'cols:', cols);
+      if(tetromino[rows][cols] === 0) continue // пропускаем пустые клетки в матрице тетромино
+      if(gameBoard[y + rows] === undefined) continue // пропускаем несуществующие строки на доске (начальная координата минусовая)
+      // проверка на движение вниз
+      // заходим в цикл, если: ниже нет строки (тетромино кончилось) или если ниже в матрице тетромино 0
+      if(tetromino[rows + 1] === undefined || tetromino[rows + 1][cols] === undefined || tetromino[rows + 1][cols] === 0) {
+        if(gameBoard[y + rows][cols + x]) {
+          console.log("столкновение!");
+          return false
+        }
+      }
     }
   }
   return true
@@ -102,6 +111,7 @@ function moveTetrominoDown() {
   } else {
     initGame()
   }
+  console.table(gameBoard);
 }
 
 function canMoveSideways(x, y) {
