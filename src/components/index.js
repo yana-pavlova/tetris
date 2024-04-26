@@ -85,14 +85,12 @@ function canMoveDown(x, y) {
   }
   for(let rows = 0; rows < tetromino.length; rows++) {
     for(let cols = 0; cols < tetromino[rows].length; cols++) {
-      console.log('y:', y, 'rows:', rows, 'x:', x, 'cols:', cols);
       if(tetromino[rows][cols] === 0) continue // пропускаем пустые клетки в матрице тетромино
       if(gameBoard[y + rows] === undefined) continue // пропускаем несуществующие строки на доске (начальная координата минусовая)
       // проверка на движение вниз
       // заходим в цикл, если: ниже нет строки (тетромино кончилось) или если ниже в матрице тетромино 0
       if(tetromino[rows + 1] === undefined || tetromino[rows + 1][cols] === undefined || tetromino[rows + 1][cols] === 0) {
         if(gameBoard[y + rows][cols + x]) {
-          console.log("столкновение!");
           return false
         }
       }
@@ -111,14 +109,46 @@ function moveTetrominoDown() {
   } else {
     initGame()
   }
-  console.table(gameBoard);
 }
 
 function canMoveSideways(x, y) {
   let rib;
   tetromino.forEach(item => rib = item.length);
+  console.log('x:', x, 'y:', y);
   if(x < 0 || x + rib > COLS) {
     return false
+  }
+  return true
+}
+
+function canMoveLeft(x, y) {
+  // TODO: проверить на коллизии слева и справа
+  for(let rows = 0; rows < tetromino.length; rows++) {
+    for(let cols = 0; cols < tetromino[rows].length; cols++) {
+      if(tetromino[rows][cols] === 0) continue
+      console.log('tetromino[rows][cols - 1]:', tetromino[rows][cols - 1]);
+      if(tetromino[rows] === undefined || tetromino[rows][cols - 1] === 0 || tetromino[rows][cols - 1] === undefined) {
+        if(gameBoard[y + rows][cols + x]) {
+          return false
+        }
+      }
+    }
+  }
+  return true
+}
+
+function canMoveRight(x, y) {
+  // TODO: проверить на коллизии слева и справа
+  for(let rows = 0; rows < tetromino.length; rows++) {
+    for(let cols = 0; cols < tetromino[rows].length; cols++) {
+      if(tetromino[rows][cols] === 0) continue
+      console.log('tetromino[rows][cols - 1]:', tetromino[rows][cols + 1]);
+      if(tetromino[rows] === undefined || tetromino[rows][cols + 1] === 0 || tetromino[rows][cols + 1] === undefined) {
+        if(gameBoard[y + rows][cols + x]) {
+          return false
+        }
+      }
+    }
   }
   return true
 }
@@ -126,21 +156,23 @@ function canMoveSideways(x, y) {
 function moveTetrominoRight() {
   let newX = x + 1;
   let newY = y;
-  if(canMoveSideways(newX, newY)) {
+  if(canMoveSideways(newX, newY) && canMoveRight(newX, newY)) {
     clearPreviousPosition();
     x += 1;
     setNewPosition();
   }
+  console.table(gameBoard);
 }
 
 function moveTetrominoLeft() {
   let newX = x - 1;
   let newY = y;
-  if(canMoveSideways(newX, newY)) {
+  if(canMoveSideways(newX, newY) && canMoveLeft(newX, newY)) {
     clearPreviousPosition();
     x -= 1;
     setNewPosition();
   }
+  console.table(gameBoard);
 }
 
 function rotateTetromino() {
