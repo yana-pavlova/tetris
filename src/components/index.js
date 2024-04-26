@@ -79,6 +79,15 @@ function setNewPosition() {
   }
 }
 
+function canMoveSideways(x, y) {
+  let rib;
+  tetromino.forEach(item => rib = item.length);
+  if(x < 0 || x + rib > COLS) {
+    return false
+  }
+  return true
+}
+
 function canMoveDown(x, y) {
   if(y + tetromino.length > ROWS) {
     return false
@@ -99,32 +108,12 @@ function canMoveDown(x, y) {
   return true
 }
 
-function moveTetrominoDown() {
-  let newX = x;
-  let newY = y + 1;
-  if(canMoveDown(newX, newY)) {
-    clearPreviousPosition();
-    y += 1;
-    setNewPosition()
-  } else {
-    initGame()
-  }
-}
-
-function canMoveSideways(x, y) {
-  let rib;
-  tetromino.forEach(item => rib = item.length);
-  if(x < 0 || x + rib > COLS) {
-    return false
-  }
-  return true
-}
-
 function canMoveLeft(x, y) {
   for(let rows = 0; rows < tetromino.length; rows++) {
     for(let cols = 0; cols < tetromino[rows].length; cols++) {
       if(tetromino[rows][cols] === 0) continue
       if(tetromino[rows] === undefined || tetromino[rows][cols - 1] === 0 || tetromino[rows][cols - 1] === undefined) {
+        if(gameBoard[y + rows] === undefined) continue;
         if(gameBoard[y + rows][cols + x]) {
           return false
         }
@@ -140,6 +129,7 @@ function canMoveRight(x, y) {
     for(let cols = 0; cols < tetromino[rows].length; cols++) {
       if(tetromino[rows][cols] === 0) continue
       if(tetromino[rows] === undefined || tetromino[rows][cols + 1] === 0 || tetromino[rows][cols + 1] === undefined) {
+        if(gameBoard[y + rows] === undefined) continue;
         if(gameBoard[y + rows][cols + x]) {
           return false
         }
@@ -147,6 +137,18 @@ function canMoveRight(x, y) {
     }
   }
   return true
+}
+
+function moveTetrominoDown() {
+  let newX = x;
+  let newY = y + 1;
+  if(canMoveDown(newX, newY)) {
+    clearPreviousPosition();
+    y += 1;
+    setNewPosition()
+  } else {
+    initGame()
+  }
 }
 
 function moveTetrominoRight() {
@@ -170,12 +172,21 @@ function moveTetrominoLeft() {
 }
 
 function rotateTetromino() {
+  let copiedGameboard = JSON.parse(JSON.stringify(gameBoard));
   clearPreviousPosition();
-  tetromino = tetromino[0].map((val, index) => tetromino.map(row => row[index]).reverse());
-  if(canMoveDown())
-    setNewPosition()
-  else console.log("нельзя вращать, кончается доска!");
-  //console.table(gameBoard);
+  let newTetromino = tetromino[0].map((val, index) => tetromino.map(row => row[index]).reverse());
+  let previousTetromino = tetromino;
+  tetromino = newTetromino;
+  x = x;
+  y = y;
+  if(canMoveDown(x,y) && canMoveSideways(x,y) && canMoveLeft(x,y) && canMoveRight(x,y)) {
+    clearPreviousPosition();
+    setNewPosition();
+  } else {
+    tetromino = previousTetromino;
+    console.log("нельзя вращать, кончается доска!");
+    gameBoard = copiedGameboard;
+  };
 }
 
 initGame();
