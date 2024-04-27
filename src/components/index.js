@@ -242,13 +242,13 @@ function drawBoard() {
   for (let y = 0; y < ROWS; y++) {
     for (let x = 0; x < COLS; x++) {
       if (gameBoard[y][x] === 1) {
+        CTX.fillStyle = '#db7093';
+        CTX.strokeStyle = 'black';
         CTX.fillRect(x * SIZE, y * SIZE, SIZE - 1, SIZE - 1);
-        CTX.strokeStyle = 'white';
-        CTX.strokeRect(x * SIZE, y * SIZE, 1, 1);
       }
     }
-  }
-  requestAnimationFrame(drawBoard)
+  };
+  requestAnimationFrame(drawBoard);
 }
 
 initGame();
