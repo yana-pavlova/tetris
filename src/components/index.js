@@ -15,12 +15,45 @@ let tetromino;
 let y = -2;
 let x = 3;
 
+let scores = 0;
+
 function initGame() {
-  tetromino = getTetromino();
-  y = -tetromino.length;
-  x = 3;
-  window.requestAnimationFrame(drawBoard);
-  window.addEventListener('keydown', handleTetrominoMovement);
+  if(checkGameBoardOverflow()) {
+    window.removeEventListener('keydown', handleTetrominoMovement);
+    console.log("game over");
+    return
+  } else {
+    tetromino = getTetromino();
+    y = -tetromino.length;
+    x = 3;
+    drawBoard();
+    window.addEventListener('keydown', handleTetrominoMovement);  
+  }
+}
+
+function checkGameBoardOverflow() {
+  if(gameBoard[0].includes(1)) return true
+  return false
+}
+
+function checkFilledRows() {
+  let res = false;
+  let rowForDeletion;
+  for(let rows = 0; rows < ROWS; rows++) {
+    if(gameBoard[rows].every(cell => cell === 1)) {
+      rowForDeletion = rows;
+      res = true;
+    }
+  }
+  return {res, rowForDeletion};
+}
+
+function removeFilledRow(row) {
+  console.log(row);
+  gameBoard.splice(row,1);
+  gameBoard.unshift(Array(COLS).fill(0));
+  scores += COLS;
+  console.table(gameBoard);
 }
 
 function drawBoard() {
@@ -145,9 +178,14 @@ function moveTetrominoDown() {
   if(canMoveDown(newX, newY)) {
     clearPreviousPosition();
     y += 1;
-    setNewPosition()
+    setNewPosition();
+    const {res, rowForDeletion} = checkFilledRows();
+    if(res) {
+      console.log("есть полный ряд:", rowForDeletion);
+      removeFilledRow(rowForDeletion);
+    }
   } else {
-    initGame()
+    initGame();
   }
 }
 
