@@ -2,6 +2,7 @@ import '../pages/index.css';
 import {TETROMINOS} from './tetrominos.js';
 
 const SCORES = document.querySelector('#scores');
+const LEVEL = document.querySelector('#level');
 const GAMEOVERDIV = document.querySelector('#gameOver');
 const GAMEOVERMES = GAMEOVERDIV.querySelector('#gameOverMessage');
 
@@ -21,19 +22,22 @@ let y = -2;
 let x = 3;
 
 let scores = 0;
+let level = 1;
+let speed = 1000; //ms
 
 SCORES.textContent = scores;
+LEVEL.textContent = level;
 
 function initGame() {
   if(checkGameBoardOverflow()) {
     window.removeEventListener('keydown', handleTetrominoMovement);
-    console.log("game over");
     showGameOverDiv();
     return
   } else {
+    console.log('speed:', speed);
+    
     const {res, rowsForDeletion} = checkFilledRows();
     if(res) {
-      console.log("есть полный ряд:", rowsForDeletion);
       removeFilledRows(rowsForDeletion);
     }
     tetromino = getTetromino();
@@ -44,10 +48,21 @@ function initGame() {
   }
 }
 
+function updateLevel() {
+  if(scores % 100 === 0) {
+    level+=1;
+    LEVEL.textContent = level;
+    speed -= 100;
+    clearInterval(intervalId);
+    intervalId = setInterval(moveTetrominoDown, speed);
+  };
+  console.log(speed);
+}
+
 function showGameOverDiv() {
   GAMEOVERDIV.style.visibility = "visible";
   GAMEOVERMES.textContent = "GAME OVER";
-  CANVAS.style.filter = 'blur(4px)';
+  CANVAS.style.filter = 'blur(1px)';
 }
 
 function checkGameBoardOverflow() {
@@ -68,7 +83,6 @@ function checkFilledRows() {
 }
 
 function removeFilledRows(rows) {
-  console.log(rows);
   rows.forEach(row => {
     gameBoard.splice(row, 1);
     gameBoard.unshift(Array(COLS).fill(0));
@@ -76,11 +90,11 @@ function removeFilledRows(rows) {
   //gameBoard.splice(rows,1);
   scores += COLS;
   updateScores();
-  console.table(gameBoard);
 }
 
 function updateScores() {
   SCORES.textContent = scores;
+  updateLevel();
 }
 
 function getTetromino() {
@@ -232,7 +246,6 @@ function rotateTetromino() {
     setNewPosition();
   } else {
     tetromino = previousTetromino;
-    console.log("нельзя вращать, кончается доска!");
     gameBoard = copiedGameboard;
   };
 }
@@ -242,8 +255,7 @@ function drawBoard() {
   for (let y = 0; y < ROWS; y++) {
     for (let x = 0; x < COLS; x++) {
       if (gameBoard[y][x] === 1) {
-        CTX.fillStyle = '#db7093';
-        CTX.strokeStyle = 'black';
+        CTX.fillStyle = '#000001';
         CTX.fillRect(x * SIZE, y * SIZE, SIZE - 1, SIZE - 1);
       }
     }
@@ -252,3 +264,4 @@ function drawBoard() {
 }
 
 initGame();
+let intervalId = setInterval(moveTetrominoDown, speed);

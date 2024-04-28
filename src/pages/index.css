@@ -1,4 +1,5 @@
 @import url('../vendor/normalize.css');
+@import url('../vendor/fonts.css');
 
 html {
   width: 100%;
@@ -12,14 +13,24 @@ html {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #A1AE91;
+  font-family: PressStart2P, monospace;
+  text-transform: uppercase;
 }
 
 .canvas {
   position: relative;
   width: 300px;
   height: 600px;
-  background-color:cornsilk;
+  background-image: 
+    repeating-linear-gradient(to right, transparent 0, transparent 29px, #869170 29px, #869170 30px),
+    repeating-linear-gradient(to bottom, transparent 0, transparent 29px, #869170 29px, #869170 30px);
+  background-size: 30px 30px;
+  border: 2px solid #000001;
 }
+
+/* linear-gradient(to right, #869170 0, #869170 7.5px, transparent 7.5px, transparent 15px),
+linear-gradient(to bottom, #869170 0, #869170 7.5px, transparent 7.5px, transparent 15px); */
 
 .gameOver {
   position: absolute;
@@ -36,5 +47,4 @@ html {
   font-weight: bold;
   display: flex;
   align-items: center;
-  font-family: monospace;
 }
