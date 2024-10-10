@@ -34,35 +34,33 @@ function initGame() {
     showGameOverDiv();
     return
   } else {
-    console.log('speed:', speed);
-    
-    const {res, rowsForDeletion} = checkFilledRows();
-    if(res) {
-      removeFilledRows(rowsForDeletion);
-    }
-    tetromino = getTetromino();
-    y = -tetromino.length;
-    x = 3;
-    drawBoard();
-    window.addEventListener('keydown', handleTetrominoMovement);  
+      const {res, rowsForDeletion} = checkFilledRows();
+      if(res) {
+        removeFilledRows(rowsForDeletion);
+      }
+      tetromino = getTetromino();
+      y = -tetromino.length;
+      x = 3;
+      drawBoard();
+      window.addEventListener('keydown', handleTetrominoMovement);  
   }
 }
 
 function updateLevel() {
-  if(scores % 100 === 0) {
+  if(scores % 80 === 0) {
     level+=1;
     LEVEL.textContent = level;
     speed -= 100;
     clearInterval(intervalId);
     intervalId = setInterval(moveTetrominoDown, speed);
   };
-  console.log(speed);
 }
 
 function showGameOverDiv() {
   GAMEOVERDIV.style.visibility = "visible";
   GAMEOVERMES.textContent = "GAME OVER";
-  CANVAS.style.filter = 'blur(1px)';
+  CANVAS.style.filter = 'blur(2px)';
+  CTX.globalAlpha = 0.6;
 }
 
 function checkGameBoardOverflow() {

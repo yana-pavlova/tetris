@@ -29,22 +29,20 @@ html {
   border: 2px solid #000001;
 }
 
-/* linear-gradient(to right, #869170 0, #869170 7.5px, transparent 7.5px, transparent 15px),
-linear-gradient(to bottom, #869170 0, #869170 7.5px, transparent 7.5px, transparent 15px); */
-
 .gameOver {
   position: absolute;
   top: 0;
   left: 0;
   width: 300px;
   height: 600px;
-  /*background-color: black;*/
+  /* background: #A1AE91; */
   color: black;
   text-align: center;
-  -webkit-text-stroke: 2px white;
+  /* -webkit-text-stroke: 0.5px #A1AE91; */
   visibility: hidden;
-  font-size: 80px;
+  font-size: 50px;
   font-weight: bold;
   display: flex;
   align-items: center;
+  z-index: 1;
 }
