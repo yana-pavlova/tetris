@@ -11,7 +11,6 @@ Try it <a href="https://yana-pavlova.github.io/tetris/">here</a>
 ## How to run
 ```
 npm i
-npm run build
 npm run dev
 ```
 
