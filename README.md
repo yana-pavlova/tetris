@@ -1,4 +1,6 @@
 # TETRIS game
+Try it <a href="https://yana-pavlova.github.io/tetris/">here</a>
+
 ![1728586808919557](https://github.com/user-attachments/assets/d7825fd1-a89d-4752-b5ac-8d1fb2547aa4)
 
 ## Tech stack
