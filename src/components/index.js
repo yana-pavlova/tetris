@@ -85,7 +85,6 @@ function removeFilledRows(rows) {
     gameBoard.splice(row, 1);
     gameBoard.unshift(Array(COLS).fill(0));
   });
-  //gameBoard.splice(rows,1);
   scores += COLS;
   updateScores();
 }
